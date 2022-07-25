@@ -40,7 +40,6 @@ public class ChatServiceImpl extends ChatServiceGrpc.ChatServiceImplBase {
                 // do something;
                 for (StreamObserver<ChatMessageFromServer> observer : observers) {
                     observer.onError(t);
-
                 }
             }
 
