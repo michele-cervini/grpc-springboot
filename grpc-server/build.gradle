@@ -1,0 +1,15 @@
+plugins {
+    id 'java-library'
+    id 'org.springframework.boot' version "${springBootVersion}"
+    id "io.spring.dependency-management" version "${springDependencyManagementVersion}"
+}
+
+dependencies {
+    implementation "org.springframework.boot:spring-boot-starter"
+    implementation "net.devh:grpc-server-spring-boot-starter:${grpcSpringBootStarterVersion}"
+    implementation project (":interface")
+}
+
+repositories {
+    mavenCentral()
+}
