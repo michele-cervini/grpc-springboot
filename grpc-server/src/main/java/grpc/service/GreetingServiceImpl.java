@@ -13,7 +13,7 @@ public class GreetingServiceImpl extends GreetingServiceGrpc.GreetingServiceImpl
     public void sayHello(HelloRequest request, StreamObserver<HelloReply> responseObserver) {
 
         HelloReply reply = HelloReply.newBuilder()
-                .setMessage("Hello ==> " + request.getName())
+                .setMessage("Hello " + request.getName())
                 .build();
         responseObserver.onNext(reply);
         responseObserver.onCompleted();

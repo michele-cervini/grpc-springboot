@@ -10,10 +10,13 @@ import io.grpc.stub.StreamObserver;
 
 import com.google.protobuf.Timestamp;
 import net.devh.boot.grpc.server.service.GrpcService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @GrpcService
 public class ChatServiceImpl extends ChatServiceGrpc.ChatServiceImplBase {
 
+    Logger log = LoggerFactory.getLogger(ChatServiceImpl.class);
 
     private static final Set<StreamObserver<ChatMessageFromServer>> observers = ConcurrentHashMap.newKeySet();
 
@@ -24,8 +27,8 @@ public class ChatServiceImpl extends ChatServiceGrpc.ChatServiceImplBase {
         return new StreamObserver<>() {
             @Override
             public void onNext(ChatMessage value) {
-                System.out.println("From: " + value.getFrom());
-                System.out.println("Message: " + value.getMessage());
+                log.info("From: " + value.getFrom());
+                log.info("Message: " + value.getMessage());
                 ChatMessageFromServer message = ChatMessageFromServer.newBuilder().setMessage(value)
                         .setTimestamp(Timestamp.newBuilder().setSeconds(System.currentTimeMillis() / 1000)).build();
 
@@ -36,7 +39,7 @@ public class ChatServiceImpl extends ChatServiceGrpc.ChatServiceImplBase {
 
             @Override
             public void onError(Throwable t) {
-                System.out.println("Error: " + t.getMessage());
+                log.error("Error: " + t.getMessage());
                 // do something;
                 for (StreamObserver<ChatMessageFromServer> observer : observers) {
                     observer.onError(t);
@@ -45,7 +48,7 @@ public class ChatServiceImpl extends ChatServiceGrpc.ChatServiceImplBase {
 
             @Override
             public void onCompleted() {
-                System.out.println("On completed");
+                log.info("On completed");
                 responseObserver.onCompleted();
                 observers.remove(responseObserver);
             }
