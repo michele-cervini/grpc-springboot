@@ -32,18 +32,14 @@ public class ChatServiceImpl extends ChatServiceGrpc.ChatServiceImplBase {
                 ChatMessageFromServer message = ChatMessageFromServer.newBuilder().setMessage(value)
                         .setTimestamp(Timestamp.newBuilder().setSeconds(System.currentTimeMillis() / 1000)).build();
 
-                for (StreamObserver<ChatMessageFromServer> observer : observers) {
-                    observer.onNext(message);
-                }
+                observers.stream().forEach(o -> o.onNext(message));
             }
 
             @Override
             public void onError(Throwable t) {
                 log.error("Error: " + t.getMessage());
                 // do something;
-                for (StreamObserver<ChatMessageFromServer> observer : observers) {
-                    observer.onError(t);
-                }
+                observers.stream().forEach(o -> onError(t));
             }
 
             @Override
